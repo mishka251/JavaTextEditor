@@ -96,7 +96,7 @@ public class MainForm extends JFrame {
 
         btnStatistic.addActionListener(this::showStatistic);
         btnClose.addActionListener(this::close);
-        setVisible(true);
+        btnColor.addActionListener(this::changeColor);
 
 
         //panel3
@@ -119,14 +119,34 @@ public class MainForm extends JFrame {
         panelDown.add(lblWordsCount, BorderLayout.SOUTH);
         panelDown.add(lblLinesCount, BorderLayout.SOUTH);
         panelDown.add(lblPunctuationsCount, BorderLayout.SOUTH);
+
+
+        setVisible(true);
     }
 
+    /**
+     * обработчиик нажания на кнопку показать статистикку - показ формы статистики
+     * TODO передавать в форму параметры для показа
+     * @param e
+     */
     void showStatistic(ActionEvent e) {
         FormStatistic fs = new FormStatistic();
     }
 
+    /**
+     * Обработчик нажатия на кнопку закрыть
+     * Закрытие приложения
+     * @param e
+     */
     void close(ActionEvent e) {
         System.exit(0);
+    }
+
+    void changeColor(ActionEvent e){
+        for(int i=0; i<12; i++){
+            Color color = new Color(20*i);
+            allButtons[i].setBackground(color);
+        }
     }
 
     static class Panel1 extends JPanel {
