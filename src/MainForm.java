@@ -1,10 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainForm extends JFrame {
+public class MainForm extends JFrame implements ClipboardOwner {
     JPanel panelUp;
     JPanel panelCenter;
     JPanel panelDown;
@@ -98,6 +101,8 @@ public class MainForm extends JFrame {
         btnClose.addActionListener(this::close);
         btnColor.addActionListener(this::changeColor);
 
+        btnCopy.addActionListener(this::copyToBuffer);
+        btnPaste.addActionListener(this::pasteFromBuffer);
 
         //panel3
         panelDown = new Panel3();
@@ -127,7 +132,8 @@ public class MainForm extends JFrame {
     /**
      * обработчиик нажания на кнопку показать статистикку - показ формы статистики
      * TODO передавать в форму параметры для показа
-     * @param e
+     *
+     * @param e событие
      */
     void showStatistic(ActionEvent e) {
         FormStatistic fs = new FormStatistic();
@@ -136,17 +142,65 @@ public class MainForm extends JFrame {
     /**
      * Обработчик нажатия на кнопку закрыть
      * Закрытие приложения
-     * @param e
+     *
+     * @param e  событие
      */
     void close(ActionEvent e) {
         System.exit(0);
     }
 
-    void changeColor(ActionEvent e){
-        for(int i=0; i<12; i++){
-            Color color = new Color(20*i);
+    /**
+     * Обработчик нажатия на кнопку цвет
+     * Изменение цвета фона каждой из кнопок на Color(20*i)
+     *
+     * @param e сыобтие
+     */
+    void changeColor(ActionEvent e) {
+        for (int i = 0; i < 12; i++) {
+            Color color = new Color(20 * i);
             allButtons[i].setBackground(color);
         }
+    }
+
+    /**
+     * Обработчик нажатия на кнопки копировать
+     * копирование в системный буфер обмена
+     *
+     * @param e событие
+     */
+    void copyToBuffer(ActionEvent e) {
+        String value = area.getText();
+        TransferableText transferableText = new TransferableText(value);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferableText, this);
+    }
+
+    /**
+     * Обработчик нажатия на кнопку вставить
+     * Вставка в текст  из системный буфер обмена
+     *
+     * @param e событие
+     */
+    void pasteFromBuffer(ActionEvent e) {
+
+        Transferable clipboardData = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
+
+        if (clipboardData != null) {
+            if (clipboardData.isDataFlavorSupported(TransferableText.HTML_FLAVOR)) {
+                try {
+                    String text = (String) clipboardData.getTransferData(TransferableText.HTML_FLAVOR);
+                    area.setText(text);
+
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void lostOwnership(Clipboard clipboard, Transferable contents) {
+
     }
 
     static class Panel1 extends JPanel {
