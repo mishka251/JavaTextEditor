@@ -118,6 +118,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnToRight.addActionListener(this::setRightAlignment);
         btnToLeft.addActionListener(this::setLeftAlignment);
 
+        btnFind.addActionListener(this::searchText);
+
         //panel3
         panelDown = new Panel3();
         panelDown.setVisible(true);
@@ -282,10 +284,11 @@ public class MainForm extends JFrame implements ClipboardOwner {
     /**
      * Обработчик нажатия на кнопку Выравнивание лево
      * Устаналивает в текстовом редакторе выравнивание слева
+     *
      * @param e событие
      */
     void setLeftAlignment(ActionEvent e) {
-        SimpleAttributeSet   attrs = new SimpleAttributeSet();
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
         StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_LEFT);
         StyledDocument doc = (StyledDocument) area.getDocument();
         doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
@@ -294,13 +297,42 @@ public class MainForm extends JFrame implements ClipboardOwner {
     /**
      * Обработчик нажатия на кнопку Выравнивание право
      * Устаналивает в текстовом редакторе выравнивание справа
+     *
      * @param e событие
      */
     void setRightAlignment(ActionEvent e) {
-        SimpleAttributeSet   attrs = new SimpleAttributeSet();
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
         StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_RIGHT);
         StyledDocument doc = (StyledDocument) area.getDocument();
         doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
+    }
+
+
+    /**
+     * Обработчик нажатия на кнопку поиска
+     * Поиск текста и выделение в textPane
+     * JAVA, почему \r\n - это 2 символа, но в JTextPane CaretPosition/select они считаюься за одного?
+     *
+     * @param e событие
+     */
+    void searchText(ActionEvent e) {
+        String term = JOptionPane.showInputDialog(this, "Что ищем?");
+        String text = area.getText();
+        text = text.replaceAll(System.lineSeparator(), "\n");
+
+        int cursorPosition = area.getCaretPosition();
+
+        int position = text.indexOf(term, cursorPosition);
+        if (position != -1) {
+            area.select(position, position + term.length());
+        } else {
+            position = text.indexOf(term, 0);
+            if (position != -1) {
+                area.select(position, position + term.length());
+            }
+        }
+        area.setSelectionColor(Color.BLUE);
+        area.grabFocus();
     }
 
     @Override
