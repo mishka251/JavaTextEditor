@@ -120,6 +120,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
         btnFind.addActionListener(this::searchText);
 
+        btnShowBuffer.addActionListener(this::showBuffer);
+
         //panel3
         panelDown = new Panel3();
         panelDown.setVisible(true);
@@ -333,6 +335,26 @@ public class MainForm extends JFrame implements ClipboardOwner {
         }
         area.setSelectionColor(Color.BLUE);
         area.grabFocus();
+    }
+
+
+    void showBuffer(ActionEvent e){
+
+        Transferable clipboardData = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
+
+        if (clipboardData != null) {
+            if (clipboardData.isDataFlavorSupported(TransferableText.HTML_FLAVOR)) {
+                try {
+                    String text = (String) clipboardData.getTransferData(TransferableText.HTML_FLAVOR);
+                    JOptionPane.showMessageDialog(this,
+                            text,
+                            "Содержимое буфера", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+
     }
 
     @Override
