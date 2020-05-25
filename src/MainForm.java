@@ -110,6 +110,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnLoad.addActionListener(this::loadFromFile);
         btnSave.addActionListener(this::saveToFile);
 
+        btnEnter.addActionListener(this::addNewLine);
+
         //panel3
         panelDown = new Panel3();
         panelDown.setVisible(true);
@@ -251,7 +253,6 @@ public class MainForm extends JFrame implements ClipboardOwner {
             return;
         }
         File selected = fileChooser.getSelectedFile();
-        // if (selected.canWrite()) {
         try {
             FileWriter fw = new FileWriter(selected);
             fw.write(area.getText());
@@ -259,9 +260,15 @@ public class MainForm extends JFrame implements ClipboardOwner {
         } catch (java.io.IOException ex) {
             //TODO
         }
-//        }else{
-//            //TODO
-//        }
+    }
+
+    /**
+     * Обработчик нажатия на клавишу enter
+     * Добавление новой строки в конец текста
+     * @param e событие
+     */
+    void addNewLine(ActionEvent e){
+        area.append(System.lineSeparator());
     }
 
     @Override
