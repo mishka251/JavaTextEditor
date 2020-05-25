@@ -153,12 +153,16 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
     /**
      * обработчиик нажания на кнопку показать статистикку - показ формы статистики
-     * TODO передавать в форму параметры для показа
      *
      * @param e событие
      */
     void showStatistic(ActionEvent e) {
-        FormStatistic fs = new FormStatistic();
+        String text = area.getText();
+        int soglasn = text.length() - text.replaceAll("[бвгджзйклмнпрстфхцчшщ]", "").length();
+        int glasn = text.length() - text.replaceAll("[аоиеёэыуюя]", "").length();
+        ;
+        StatisticData sd = new StatisticData(soglasn, glasn);
+        FormStatistic fs = new FormStatistic(sd);
     }
 
     /**
