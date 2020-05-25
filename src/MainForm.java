@@ -194,7 +194,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
             if (clipboardData.isDataFlavorSupported(TransferableText.HTML_FLAVOR)) {
                 try {
                     String text = (String) clipboardData.getTransferData(TransferableText.HTML_FLAVOR);
-                    area.setText(text);
+                    area.append(text);
 
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -242,6 +242,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
     /**
      * Обработчик нажатия кнопки сохранить
      * Сохранеине текста в файл
+     *
      * @param e событие
      */
     void saveToFile(ActionEvent e) {
