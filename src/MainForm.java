@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -7,6 +9,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,6 +59,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
         //textarea
         area = new JTextPane();
         area.setBounds(10, 10, 350, 600);
+        area.getDocument().addDocumentListener(new TextChangeListener());
         // area.setLineWrap(true);
         // area.setWrapStyleWord(true);
         panelUp.add(area, BorderLayout.CENTER);
@@ -338,7 +342,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
     }
 
 
-    void showBuffer(ActionEvent e){
+    void showBuffer(ActionEvent e) {
 
         Transferable clipboardData = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
 
@@ -353,6 +357,39 @@ public class MainForm extends JFrame implements ClipboardOwner {
                     System.out.println(ex.getMessage());
                 }
             }
+        }
+    }
+
+    /**
+     * Обовление информации о тексте
+     */
+    void updateInfo() {
+        String text = area.getText();
+        int characters = text.length();
+        int words = text.split("\\s").length;
+        int lines = text.split(System.lineSeparator()).length;
+        int puncts = text.length() - text.replaceAll("\\p{P}", "").length();
+        lblCharactersCount.setText(Integer.toString(characters));
+        lblWordsCount.setText(Integer.toString(words));
+        lblLinesCount.setText(Integer.toString(lines));
+        lblPunctuationsCount.setText(Integer.toString(puncts));
+    }
+
+    /**
+     * Класс для обработки событий изменения текста в JPaneText
+     */
+    class TextChangeListener implements DocumentListener {
+
+        public void insertUpdate(DocumentEvent e) {
+            updateInfo();
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+            updateInfo();
+        }
+
+        public void changedUpdate(DocumentEvent e) {
+            updateInfo();
         }
 
     }
