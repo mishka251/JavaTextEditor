@@ -9,16 +9,15 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
 public class MainForm extends JFrame implements ClipboardOwner {
-    JPanel panelUp;
-    JPanel panelCenter;
-    JPanel panelDown;
+    JPanel panelTextArea;
+    JPanel panelButtons;
+    JPanel panelInfo;
     JTextPane area;
 
     JButton[] allButtons;
@@ -52,9 +51,9 @@ public class MainForm extends JFrame implements ClipboardOwner {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //panel1
-        panelUp = new Panel1();
-        panelUp.setVisible(true);
-        add(panelUp, BorderLayout.NORTH);
+        panelTextArea = new Panel1();
+        panelTextArea.setVisible(true);
+        add(panelTextArea, BorderLayout.NORTH);
 
         //textarea
         area = new JTextPane();
@@ -62,12 +61,12 @@ public class MainForm extends JFrame implements ClipboardOwner {
         area.getDocument().addDocumentListener(new TextChangeListener());
         // area.setLineWrap(true);
         // area.setWrapStyleWord(true);
-        panelUp.add(area, BorderLayout.CENTER);
+        panelTextArea.add(area, BorderLayout.CENTER);
 
         //panel2
-        panelCenter = new Panel2();
-        panelCenter.setVisible(true);
-        add(panelCenter);
+        panelButtons = new Panel2();
+        panelButtons.setVisible(true);
+        add(panelButtons);
 
 
         //buttons
@@ -104,7 +103,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
             allButtons[i].setFont(new Font("Dialog", Font.PLAIN, 10));
             allButtons[i].setBounds(x, y, 95, 50);
-            panelCenter.add(allButtons[i], BorderLayout.NORTH);
+            panelButtons.add(allButtons[i], BorderLayout.NORTH);
         }
 
         btnStatistic.addActionListener(this::showStatistic);
@@ -127,9 +126,9 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnShowBuffer.addActionListener(this::showBuffer);
 
         //panel3
-        panelDown = new Panel3();
-        panelDown.setVisible(true);
-        add(panelDown, BorderLayout.SOUTH);
+        panelInfo = new Panel3();
+        panelInfo.setVisible(true);
+        add(panelInfo, BorderLayout.SOUTH);
 
 
         lblCharactersCount = new JLabel("0");
@@ -142,10 +141,10 @@ public class MainForm extends JFrame implements ClipboardOwner {
         lblLinesCount.setBounds(90, 70, 77, 20);
         lblPunctuationsCount.setBounds(170, 100, 158, 20);
 
-        panelDown.add(lblCharactersCount, BorderLayout.SOUTH);
-        panelDown.add(lblWordsCount, BorderLayout.SOUTH);
-        panelDown.add(lblLinesCount, BorderLayout.SOUTH);
-        panelDown.add(lblPunctuationsCount, BorderLayout.SOUTH);
+        panelInfo.add(lblCharactersCount, BorderLayout.SOUTH);
+        panelInfo.add(lblWordsCount, BorderLayout.SOUTH);
+        panelInfo.add(lblLinesCount, BorderLayout.SOUTH);
+        panelInfo.add(lblPunctuationsCount, BorderLayout.SOUTH);
 
         fileChooser = new JFileChooser();
         setVisible(true);
@@ -183,9 +182,28 @@ public class MainForm extends JFrame implements ClipboardOwner {
      */
     void changeColor(ActionEvent e) {
         for (int i = 0; i < 12; i++) {
-            Color color = new Color(20 * i);
+            Color color = new Color(20 * 5);
             allButtons[i].setBackground(color);
         }
+        int moveLength = 5 * 5;
+        Rectangle bounds = panelButtons.getBounds();
+        bounds.x += moveLength / 2.0;
+        bounds.y -= moveLength / 2.0;
+        panelButtons.setBounds(bounds);
+
+        bounds = panelInfo.getBounds();
+        bounds.x += moveLength / 2.0;
+        bounds.y += moveLength / 2.0;
+        panelInfo.setBounds(bounds);
+
+        bounds = panelTextArea.getBounds();
+        bounds.x -= moveLength / 2.0;
+        panelTextArea.setBounds(bounds);
+
+        JOptionPane.showMessageDialog(this,
+                "Сдвинули, покрасили", "",
+                JOptionPane.PLAIN_MESSAGE);
+
     }
 
     /**
