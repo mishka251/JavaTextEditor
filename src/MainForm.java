@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -13,7 +16,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
     JPanel panelUp;
     JPanel panelCenter;
     JPanel panelDown;
-    JTextArea area;
+    JTextPane area;
 
     JButton[] allButtons;
     JButton btnCopy;
@@ -51,10 +54,10 @@ public class MainForm extends JFrame implements ClipboardOwner {
         add(panelUp, BorderLayout.NORTH);
 
         //textarea
-        area = new JTextArea();
+        area = new JTextPane();
         area.setBounds(10, 10, 350, 600);
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
+        // area.setLineWrap(true);
+        // area.setWrapStyleWord(true);
         panelUp.add(area, BorderLayout.CENTER);
 
         //panel2
@@ -111,6 +114,9 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnSave.addActionListener(this::saveToFile);
 
         btnEnter.addActionListener(this::addNewLine);
+
+        btnToRight.addActionListener(this::setRightAlignment);
+        btnToLeft.addActionListener(this::setLeftAlignment);
 
         //panel3
         panelDown = new Panel3();
@@ -196,7 +202,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
             if (clipboardData.isDataFlavorSupported(TransferableText.HTML_FLAVOR)) {
                 try {
                     String text = (String) clipboardData.getTransferData(TransferableText.HTML_FLAVOR);
-                    area.append(text);
+                    area.setText(area.getText() + text);
+                    //area.append(text);
 
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -265,10 +272,35 @@ public class MainForm extends JFrame implements ClipboardOwner {
     /**
      * Обработчик нажатия на клавишу enter
      * Добавление новой строки в конец текста
+     *
      * @param e событие
      */
-    void addNewLine(ActionEvent e){
-        area.append(System.lineSeparator());
+    void addNewLine(ActionEvent e) {
+        area.setText(area.getText() + System.lineSeparator());
+    }
+
+    /**
+     * Обработчик нажатия на кнопку Выравнивание лево
+     * Устаналивает в текстовом редакторе выравнивание слева
+     * @param e событие
+     */
+    void setLeftAlignment(ActionEvent e) {
+        SimpleAttributeSet   attrs = new SimpleAttributeSet();
+        StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_LEFT);
+        StyledDocument doc = (StyledDocument) area.getDocument();
+        doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
+    }
+
+    /**
+     * Обработчик нажатия на кнопку Выравнивание право
+     * Устаналивает в текстовом редакторе выравнивание справа
+     * @param e событие
+     */
+    void setRightAlignment(ActionEvent e) {
+        SimpleAttributeSet   attrs = new SimpleAttributeSet();
+        StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_RIGHT);
+        StyledDocument doc = (StyledDocument) area.getDocument();
+        doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
     }
 
     @Override
