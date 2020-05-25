@@ -4,8 +4,10 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class MainForm extends JFrame implements ClipboardOwner {
     JPanel panelUp;
@@ -31,6 +33,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
     JLabel lblWordsCount;
     JLabel lblLinesCount;
     JLabel lblPunctuationsCount;
+    JFileChooser fileChooser;
 
 
     //  static Panel3 panel3;
@@ -104,6 +107,9 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnCopy.addActionListener(this::copyToBuffer);
         btnPaste.addActionListener(this::pasteFromBuffer);
 
+        btnLoad.addActionListener(this::loadFromFile);
+        btnSave.addActionListener(this::saveToFile);
+
         //panel3
         panelDown = new Panel3();
         panelDown.setVisible(true);
@@ -125,7 +131,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
         panelDown.add(lblLinesCount, BorderLayout.SOUTH);
         panelDown.add(lblPunctuationsCount, BorderLayout.SOUTH);
 
-
+        fileChooser = new JFileChooser();
         setVisible(true);
     }
 
@@ -143,7 +149,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
      * Обработчик нажатия на кнопку закрыть
      * Закрытие приложения
      *
-     * @param e  событие
+     * @param e событие
      */
     void close(ActionEvent e) {
         System.exit(0);
@@ -195,12 +201,70 @@ public class MainForm extends JFrame implements ClipboardOwner {
                 }
             }
         }
+    }
 
+    /**
+     * Обработчик нажатия на кнопк загрузить
+     * Загрузка из файла
+     *
+     * @param e соыбтие
+     */
+    void loadFromFile(ActionEvent e) {
+        int dialogResult = fileChooser.showOpenDialog(this);
+        if (dialogResult != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        File selected = fileChooser.getSelectedFile();
+        if (selected.canRead()) {
+            try {
+                FileReader sr = new FileReader(selected);
+                Scanner scanner = new Scanner(sr);
+                StringBuilder text = new StringBuilder();
+                while (scanner.hasNextLine()) {
+                    text.append(scanner.nextLine());
+                    if (scanner.hasNextLine()) {
+                        text.append(System.lineSeparator());
+                    }
+                }
+                sr.close();
+                area.setText(text.toString());
+            } catch (FileNotFoundException ex) {
+                //TODO
+            } catch (IOException ex) {
+                //ex.printStackTrace();
+                //TODO
+            }
+        } else {
+            //TODO
+        }
+    }
+
+    /**
+     * Обработчик нажатия кнопки сохранить
+     * Сохранеине текста в файл
+     * @param e событие
+     */
+    void saveToFile(ActionEvent e) {
+        int dialogResult = fileChooser.showSaveDialog(this);
+        if (dialogResult != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        File selected = fileChooser.getSelectedFile();
+        // if (selected.canWrite()) {
+        try {
+            FileWriter fw = new FileWriter(selected);
+            fw.write(area.getText());
+            fw.close();
+        } catch (java.io.IOException ex) {
+            //TODO
+        }
+//        }else{
+//            //TODO
+//        }
     }
 
     @Override
     public void lostOwnership(Clipboard clipboard, Transferable contents) {
-
     }
 
     static class Panel1 extends JPanel {
