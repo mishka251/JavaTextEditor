@@ -42,19 +42,32 @@ public class MainForm extends JFrame implements ClipboardOwner {
     JFileChooser fileChooser;
 
 
-    //  static Panel3 panel3;
-    MainForm() {
-        setLayout(null);
+    void initForm() {
         Date date = new Date();
         SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
         setTitle("Text Editor. Rezyapov D.N. Вариант 5  " + sd.format(date));
-        setSize(715, 670);
+        setSize(855, 670);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
+    //  static Panel3 panel3;
+    MainForm() {
+        initForm();
+        setLayout(new GridBagLayout());
+        GridBagConstraints panelTextConstraints = new GridBagConstraints();
+
+        panelTextConstraints.fill = GridBagConstraints.BOTH;
+        panelTextConstraints.gridx = 0;
+        panelTextConstraints.gridy = 0;
+        panelTextConstraints.gridwidth = 1;
+        panelTextConstraints.gridheight = 2;
+        panelTextConstraints.weighty = 1;
+        panelTextConstraints.weightx = 1.5;
+        panelTextConstraints.insets = new Insets(5, 5, 5, 5);
         //panel1
         panelTextArea = new Panel1();
         panelTextArea.setVisible(true);
-        add(panelTextArea, BorderLayout.NORTH);
+        add(panelTextArea, panelTextConstraints);
 
         //textarea
         area = new JTextPane();
@@ -62,12 +75,25 @@ public class MainForm extends JFrame implements ClipboardOwner {
         area.getDocument().addDocumentListener(new TextChangeListener());
         // area.setLineWrap(true);
         // area.setWrapStyleWord(true);
-        panelTextArea.add(area, BorderLayout.CENTER);
+        panelTextArea.add(area);
 
         //panel2
+
+        GridBagConstraints panelButtonsConstraints = new GridBagConstraints();
+
+        panelButtonsConstraints.fill = GridBagConstraints.BOTH;
+        panelButtonsConstraints.gridx = 1;
+        panelButtonsConstraints.gridy = 0;
+        panelButtonsConstraints.gridwidth = 1;
+        panelButtonsConstraints.gridheight = 1;
+        panelButtonsConstraints.weightx = 0.5;
+        panelButtonsConstraints.weighty = 0.5;
+
+        panelButtonsConstraints.insets = new Insets(5, 5, 5, 5);
+
         panelButtons = new Panel2();
         panelButtons.setVisible(true);
-        add(panelButtons);
+        add(panelButtons, panelButtonsConstraints);
 
 
         //buttons
@@ -99,12 +125,21 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
 
         for (int i = 0; i < 12; i++) {
-            int x = 10 + 100 * (i % 3);
-            int y = 5 + 100 * (i / 3);
+            // int x = 10 + 100 * (i % 3);
+            //int y = 5 + 100 * (i / 3);
+            GridBagConstraints buttonConstraints = new GridBagConstraints();
+            buttonConstraints.gridx = i % 3;
+            buttonConstraints.gridy = i / 3;
+            buttonConstraints.gridheight = 1;
+            buttonConstraints.gridwidth = 1;
+            buttonConstraints.weightx = 1;
+            buttonConstraints.weighty = 1;
+            buttonConstraints.fill = GridBagConstraints.BOTH;
+            buttonConstraints.insets = new Insets(15, 10, 0, 10);
 
             allButtons[i].setFont(new Font("Dialog", Font.PLAIN, 10));
-            allButtons[i].setBounds(x, y, 95, 50);
-            panelButtons.add(allButtons[i], BorderLayout.NORTH);
+            //allButtons[i].setBounds(x, y, 95, 50);
+            panelButtons.add(allButtons[i], buttonConstraints);
         }
 
         btnStatistic.addActionListener(this::showStatistic);
@@ -127,9 +162,20 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnShowBuffer.addActionListener(this::showBuffer);
 
         //panel3
+        GridBagConstraints panelInfoConstraints = new GridBagConstraints();
+
+        panelInfoConstraints.fill = GridBagConstraints.BOTH;
+        panelInfoConstraints.gridx = 1;
+        panelInfoConstraints.gridy = 1;
+        panelInfoConstraints.gridwidth = 1;
+        panelInfoConstraints.gridheight = 1;
+        panelInfoConstraints.weightx = 0.5;
+        panelInfoConstraints.weighty = 0.5;
+        panelInfoConstraints.insets = new Insets(5, 5, 5, 5);
+
         panelInfo = new Panel3();
         panelInfo.setVisible(true);
-        add(panelInfo, BorderLayout.SOUTH);
+        add(panelInfo, panelInfoConstraints);
 
 
         lblCharactersCount = new JLabel("0");
@@ -142,10 +188,10 @@ public class MainForm extends JFrame implements ClipboardOwner {
         lblLinesCount.setBounds(90, 70, 77, 20);
         lblPunctuationsCount.setBounds(170, 100, 158, 20);
 
-        panelInfo.add(lblCharactersCount, BorderLayout.SOUTH);
-        panelInfo.add(lblWordsCount, BorderLayout.SOUTH);
-        panelInfo.add(lblLinesCount, BorderLayout.SOUTH);
-        panelInfo.add(lblPunctuationsCount, BorderLayout.SOUTH);
+        panelInfo.add(lblCharactersCount/*, BorderLayout.SOUTH*/);
+        panelInfo.add(lblWordsCount/*, BorderLayout.SOUTH*/);
+        panelInfo.add(lblLinesCount/*, BorderLayout.SOUTH*/);
+        panelInfo.add(lblPunctuationsCount/*, BorderLayout.SOUTH*/);
 
         fileChooser = new JFileChooser();
         setVisible(true);
@@ -180,10 +226,10 @@ public class MainForm extends JFrame implements ClipboardOwner {
      * @param e событие
      */
     void close(ActionEvent e) {
-        String surname="Rezyapov";
+        String surname = "Rezyapov";
         int firstCharacter = surname.getBytes()[0];
-        BigInteger factor= factorial(firstCharacter+77);
-        JOptionPane.showMessageDialog(this, "Факториал = "+factor.toString(), "", JOptionPane.QUESTION_MESSAGE);
+        BigInteger factor = factorial(firstCharacter + 77);
+        JOptionPane.showMessageDialog(this, "Факториал = " + factor.toString(), "", JOptionPane.QUESTION_MESSAGE);
         System.exit(0);
     }
 
@@ -199,19 +245,37 @@ public class MainForm extends JFrame implements ClipboardOwner {
             allButtons[i].setBackground(color);
         }
         int moveLength = 5 * 5;
-        Rectangle bounds = panelButtons.getBounds();
-        bounds.x += moveLength / 2.0;
-        bounds.y -= moveLength / 2.0;
-        panelButtons.setBounds(bounds);
+        GridBagLayout layout = (GridBagLayout) getContentPane().getLayout();
+        GridBagConstraints panelTextAreaConstraints = layout.getConstraints(panelTextArea);
+        panelTextAreaConstraints.insets.right += moveLength / 2;
+        // panelTextAreaInsets
+        layout.setConstraints(panelTextArea, panelTextAreaConstraints);
 
-        bounds = panelInfo.getBounds();
-        bounds.x += moveLength / 2.0;
-        bounds.y += moveLength / 2.0;
-        panelInfo.setBounds(bounds);
+        GridBagConstraints panelInfoConstraints = layout.getConstraints(panelInfo);
+        panelInfoConstraints.insets.left += moveLength / 2;
+        panelInfoConstraints.insets.top += moveLength / 2;
+        layout.setConstraints(panelInfo, panelInfoConstraints);
 
-        bounds = panelTextArea.getBounds();
-        bounds.x -= moveLength / 2.0;
-        panelTextArea.setBounds(bounds);
+
+        GridBagConstraints panelButtonsConstraints = layout.getConstraints(panelButtons);
+        panelButtonsConstraints.insets.bottom += moveLength / 2;
+        panelButtonsConstraints.insets.left += moveLength / 2;
+        layout.setConstraints(panelButtons, panelButtonsConstraints);
+
+        for (int i = 0; i < 12; i++) {
+            GridBagLayout buttonsLayout = (GridBagLayout) panelButtons.getLayout();
+            GridBagConstraints buttonConstraints = buttonsLayout.getConstraints(allButtons[i]);
+            buttonConstraints.insets.top = 0;
+            buttonConstraints.insets.bottom = 15;
+            buttonsLayout.setConstraints(allButtons[i], buttonConstraints);
+        }
+
+
+        getContentPane().revalidate();
+        getContentPane().repaint();
+        revalidate();
+        repaint();
+
 
         JOptionPane.showMessageDialog(this,
                 "Сдвинули, покрасили", "",
@@ -447,7 +511,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
         Panel2() {
             setBounds(380, 5, 315, 360);
             setBackground(Color.cyan);
-            setLayout(null);
+            setLayout(new GridBagLayout());
         }
 
     }
@@ -468,10 +532,10 @@ public class MainForm extends JFrame implements ClipboardOwner {
             label3.setBounds(10, 70, 80, 20);
             label4.setBounds(10, 100, 160, 20);
 
-            add(label1, BorderLayout.SOUTH);
-            add(label2, BorderLayout.SOUTH);
-            add(label3, BorderLayout.SOUTH);
-            add(label4, BorderLayout.SOUTH);
+            add(label1/*, BorderLayout.SOUTH*/);
+            add(label2/*, BorderLayout.SOUTH*/);
+            add(label3/*, BorderLayout.SOUTH*/);
+            add(label4/*, BorderLayout.SOUTH*/);
         }
     }
 
