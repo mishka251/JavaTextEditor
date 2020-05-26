@@ -10,6 +10,7 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.io.*;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -159,9 +160,17 @@ public class MainForm extends JFrame implements ClipboardOwner {
         String text = area.getText();
         int soglasn = text.length() - text.replaceAll("[бвгджзйклмнпрстфхцчшщ]", "").length();
         int glasn = text.length() - text.replaceAll("[аоиеёэыуюя]", "").length();
-        ;
+
         StatisticData sd = new StatisticData(soglasn, glasn);
         FormStatistic fs = new FormStatistic(sd);
+    }
+
+    BigInteger factorial(int n) {
+        BigInteger result = BigInteger.ONE;
+        for (int i = 2; i <= n; i++) {
+            result = result.multiply(BigInteger.valueOf(i));
+        }
+        return result;
     }
 
     /**
@@ -171,6 +180,10 @@ public class MainForm extends JFrame implements ClipboardOwner {
      * @param e событие
      */
     void close(ActionEvent e) {
+        String surname="Rezyapov";
+        int firstCharacter = surname.getBytes()[0];
+        BigInteger factor= factorial(firstCharacter+77);
+        JOptionPane.showMessageDialog(this, "Факториал = "+factor.toString(), "", JOptionPane.QUESTION_MESSAGE);
         System.exit(0);
     }
 
@@ -357,6 +370,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
             position = text.indexOf(term, 0);
             if (position != -1) {
                 area.select(position, position + term.length());
+            } else {
+                JOptionPane.showMessageDialog(this, "слово не найдено");
             }
         }
         area.setSelectionColor(Color.BLUE);
