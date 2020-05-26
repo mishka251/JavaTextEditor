@@ -73,8 +73,6 @@ public class MainForm extends JFrame implements ClipboardOwner {
         area = new JTextPane();
         area.setBounds(10, 10, 350, 600);
         area.getDocument().addDocumentListener(new TextChangeListener());
-        // area.setLineWrap(true);
-        // area.setWrapStyleWord(true);
         panelTextArea.add(area);
 
         //panel2
@@ -125,8 +123,6 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
 
         for (int i = 0; i < 12; i++) {
-            // int x = 10 + 100 * (i % 3);
-            //int y = 5 + 100 * (i / 3);
             GridBagConstraints buttonConstraints = new GridBagConstraints();
             buttonConstraints.gridx = i % 3;
             buttonConstraints.gridy = i / 3;
@@ -138,7 +134,6 @@ public class MainForm extends JFrame implements ClipboardOwner {
             buttonConstraints.insets = new Insets(15, 10, 0, 10);
 
             allButtons[i].setFont(new Font("Dialog", Font.PLAIN, 10));
-            //allButtons[i].setBounds(x, y, 95, 50);
             panelButtons.add(allButtons[i], buttonConstraints);
         }
 
@@ -176,7 +171,41 @@ public class MainForm extends JFrame implements ClipboardOwner {
         panelInfo = new Panel3();
         panelInfo.setVisible(true);
         add(panelInfo, panelInfoConstraints);
+        panelInfo.setLayout(new GridBagLayout());
 
+        Panel3 textInfo = new Panel3();
+        // textInfo.setLayout(null);
+        textInfo.setVisible(true);
+        textInfo.setBackground(Color.green);
+
+        GridBagConstraints textInfoConstraints = new GridBagConstraints();
+        textInfoConstraints.gridx = 0;
+        textInfoConstraints.gridy = 0;
+        textInfoConstraints.gridwidth = 1;
+        textInfoConstraints.gridheight = 1;
+        textInfoConstraints.weightx = 1.5;
+        textInfoConstraints.weighty = 1;
+        textInfoConstraints.fill = GridBagConstraints.BOTH;
+        textInfoConstraints.insets = new Insets(5, 5, 5, 5);
+
+        panelInfo.add(textInfo, textInfoConstraints);
+
+        Panel panelVariantInfo = new Panel();
+        panelVariantInfo.setLayout(null);
+        panelVariantInfo.setVisible(true);
+        panelVariantInfo.setBackground(Color.red);
+
+        GridBagConstraints variantInfoConstraints = new GridBagConstraints();
+        variantInfoConstraints.gridx = 1;
+        variantInfoConstraints.gridy = 0;
+        variantInfoConstraints.gridwidth = 1;
+        variantInfoConstraints.gridheight = 1;
+        variantInfoConstraints.weightx = 1;
+        variantInfoConstraints.weighty = 1;
+        variantInfoConstraints.fill = GridBagConstraints.BOTH;
+        variantInfoConstraints.insets = new Insets(5, 5, 5, 5);
+
+        panelInfo.add(panelVariantInfo, variantInfoConstraints);
 
         lblCharactersCount = new JLabel("0");
         lblWordsCount = new JLabel("0");
@@ -188,10 +217,41 @@ public class MainForm extends JFrame implements ClipboardOwner {
         lblLinesCount.setBounds(90, 70, 77, 20);
         lblPunctuationsCount.setBounds(170, 100, 158, 20);
 
-        panelInfo.add(lblCharactersCount/*, BorderLayout.SOUTH*/);
-        panelInfo.add(lblWordsCount/*, BorderLayout.SOUTH*/);
-        panelInfo.add(lblLinesCount/*, BorderLayout.SOUTH*/);
-        panelInfo.add(lblPunctuationsCount/*, BorderLayout.SOUTH*/);
+        JLabel label1 = new JLabel("Число символов:");
+        JLabel label2 = new JLabel("Число слов:");
+        JLabel label3 = new JLabel("Число строк:");
+        JLabel label4 = new JLabel("Число знаков препинания:");
+
+        label1.setBounds(10, 10, 110, 20);
+        label2.setBounds(10, 40, 75, 20);
+        label3.setBounds(10, 70, 80, 20);
+        label4.setBounds(10, 100, 160, 20);
+
+        textInfo.add(label1);
+        textInfo.add(label2);
+        textInfo.add(label3);
+        textInfo.add(label4);
+
+        textInfo.add(lblCharactersCount);
+        textInfo.add(lblWordsCount);
+        textInfo.add(lblLinesCount);
+        textInfo.add(lblPunctuationsCount);
+
+
+        String variantInfo = "Задание 1 - Rezyapov D.N." + System.lineSeparator() +
+                "Задание 2 - текстовый редактор, вариант 5" + System.lineSeparator() +
+                "Задание 3 - цвет 100, расстояние 25 пт," + System.lineSeparator() +
+                " тип сообщения PLAIN_MESSAGE" + System.lineSeparator() +
+                "Задание 4 - ???" + System.lineSeparator() +
+                "Задание 5 - ???" + System.lineSeparator() +
+                "Задание 6 - ???" + System.lineSeparator() +
+                "Задание 7 - факториал суммы ASCII-кодов первых " + System.lineSeparator() +
+                "букв фамилий участников группы + 77,"+ System.lineSeparator() +" тип сообщения QUESTION_MESSAGE";
+        JTextArea variantInfoField = new JTextArea(variantInfo);
+
+        //JLabel variantInfoLabel1 = new JLabel();
+        variantInfoField.setBounds(10, 10, 300, 300);
+        panelVariantInfo.add(variantInfoField);
 
         fileChooser = new JFileChooser();
         setVisible(true);
@@ -522,20 +582,6 @@ public class MainForm extends JFrame implements ClipboardOwner {
             setLayout(null);
             setBounds(380, 370, 315, 255);
             setBackground(Color.cyan);
-            JLabel label1 = new JLabel("Число символов:");
-            JLabel label2 = new JLabel("Число слов:");
-            JLabel label3 = new JLabel("Число строк:");
-            JLabel label4 = new JLabel("Число знаков препинания:");
-
-            label1.setBounds(10, 10, 110, 20);
-            label2.setBounds(10, 40, 75, 20);
-            label3.setBounds(10, 70, 80, 20);
-            label4.setBounds(10, 100, 160, 20);
-
-            add(label1/*, BorderLayout.SOUTH*/);
-            add(label2/*, BorderLayout.SOUTH*/);
-            add(label3/*, BorderLayout.SOUTH*/);
-            add(label4/*, BorderLayout.SOUTH*/);
         }
     }
 
