@@ -9,6 +9,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -48,7 +50,12 @@ public class MainForm extends JFrame implements ClipboardOwner {
         SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
         setTitle("Text Editor. Rezyapov D.N. Вариант 5  " + sd.format(date));
         setSize(855, 670);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+                close(null);
+            }
+        });
     }
 
     //  static Panel3 panel3;
@@ -172,41 +179,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
         panelInfo = new Panel3();
         panelInfo.setVisible(true);
         add(panelInfo, panelInfoConstraints);
-        // panelInfo.setLayout(new GridBagLayout());
 
-//        Panel3 textInfo = new Panel3();
-//        // textInfo.setLayout(null);
-//        textInfo.setVisible(true);
-//        textInfo.setBackground(Color.green);
-//
-//        GridBagConstraints textInfoConstraints = new GridBagConstraints();
-//        textInfoConstraints.gridx = 0;
-//        textInfoConstraints.gridy = 0;
-//        textInfoConstraints.gridwidth = 1;
-//        textInfoConstraints.gridheight = 1;
-//        textInfoConstraints.weightx = 1.5;
-//        textInfoConstraints.weighty = 1;
-//        textInfoConstraints.fill = GridBagConstraints.BOTH;
-//        textInfoConstraints.insets = new Insets(5, 5, 5, 5);
-//
-//        panelInfo.add(textInfo, textInfoConstraints);
-//
-//        Panel panelVariantInfo = new Panel();
-//        panelVariantInfo.setLayout(null);
-//        panelVariantInfo.setVisible(true);
-//        panelVariantInfo.setBackground(Color.red);
-//
-//        GridBagConstraints variantInfoConstraints = new GridBagConstraints();
-//        variantInfoConstraints.gridx = 1;
-//        variantInfoConstraints.gridy = 0;
-//        variantInfoConstraints.gridwidth = 1;
-//        variantInfoConstraints.gridheight = 1;
-//        variantInfoConstraints.weightx = 1;
-//        variantInfoConstraints.weighty = 1;
-//        variantInfoConstraints.fill = GridBagConstraints.BOTH;
-//        variantInfoConstraints.insets = new Insets(5, 5, 5, 5);
-//
-//        panelInfo.add(panelVariantInfo, variantInfoConstraints);
 
         lblCharactersCount = new JLabel("0");
         lblWordsCount = new JLabel("0");
@@ -299,6 +272,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
         System.exit(0);
     }
 
+    boolean colorChanged = false;
+
     /**
      * Обработчик нажатия на кнопку цвет
      * Изменение цвета фона каждой из кнопок на Color(20*i)
@@ -306,11 +281,12 @@ public class MainForm extends JFrame implements ClipboardOwner {
      * @param e сыобтие
      */
     void changeColor(ActionEvent e) {
+        Color color = this.colorChanged ? Color.white : new Color(20 * 5);
         for (int i = 0; i < 12; i++) {
-            Color color = new Color(20 * 5);
             allButtons[i].setBackground(color);
         }
-        int moveLength = 5 * 5;
+
+        int moveLength = colorChanged ? -5 * 5 : 5 * 5;
         GridBagLayout layout = (GridBagLayout) getContentPane().getLayout();
         GridBagConstraints panelTextAreaConstraints = layout.getConstraints(panelTextArea);
         panelTextAreaConstraints.insets.right += moveLength / 2;
@@ -347,6 +323,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
                 "Сдвинули, покрасили", "",
                 JOptionPane.PLAIN_MESSAGE);
 
+        colorChanged = !colorChanged;
     }
 
     /**
