@@ -139,7 +139,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
             buttonConstraints.weightx = 1;
             buttonConstraints.weighty = 1;
             buttonConstraints.fill = GridBagConstraints.BOTH;
-            buttonConstraints.insets = new Insets(15, 10, 0, 10);
+            buttonConstraints.insets = new Insets(0, 10, 15, 10);
 
             allButtons[i].setFont(new Font("Dialog", Font.PLAIN, 10));
             panelButtons.add(allButtons[i], buttonConstraints);
@@ -307,8 +307,14 @@ public class MainForm extends JFrame implements ClipboardOwner {
         for (int i = 0; i < 12; i++) {
             GridBagLayout buttonsLayout = (GridBagLayout) panelButtons.getLayout();
             GridBagConstraints buttonConstraints = buttonsLayout.getConstraints(allButtons[i]);
-            buttonConstraints.insets.top = 0;
-            buttonConstraints.insets.bottom = 15;
+            if (colorChanged) {
+                buttonConstraints.insets.top = 0;
+                buttonConstraints.insets.bottom = 15;
+            } else {
+                buttonConstraints.insets.top = 15;
+                buttonConstraints.insets.bottom = 0;
+            }
+
             buttonsLayout.setConstraints(allButtons[i], buttonConstraints);
         }
 
@@ -406,6 +412,16 @@ public class MainForm extends JFrame implements ClipboardOwner {
      * @param e событие
      */
     void saveToFile(ActionEvent e) {
+        String[] saveTypes = {"резюме", "договор", "заявление"};
+        int result = JOptionPane.showOptionDialog(
+                this,
+                "Что собираетесь сохранить?",
+                "Выбор типа документа",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                saveTypes, saveTypes[0]);
+        if (result == -1) {
+            return;
+        }
         int dialogResult = fileChooser.showSaveDialog(this);
         if (dialogResult != JFileChooser.APPROVE_OPTION) {
             return;
@@ -429,6 +445,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
      */
     void addNewLine(ActionEvent e) {
         area.setText(area.getText() + System.lineSeparator());
+        area.grabFocus();
     }
 
     /**
