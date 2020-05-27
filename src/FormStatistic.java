@@ -16,23 +16,25 @@ public class FormStatistic extends JFrame {
         Date date = new Date();
         SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
         setTitle("Резяпов Д.Н. Вариант 5  " + sd.format(date));
-        setSize(370, 170);
+        setSize(570, 170);
         Panel4 panel4 = new Panel4();
         panel4.setVisible(true);
         add(panel4);
         setVisible(true);
 
-        lblFilledFieldsCount = new JLabel("0");
-        lblErrorCount = new JLabel("0");
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String saveTime = data.getSaveTime() == null ? "Не сохранено" : sdfDate.format(data.getSaveTime());
+        lblFilledFieldsCount = new JLabel(Integer.toString(data.getFilledFields()));
+        lblErrorCount = new JLabel("поле ввода текстового редактора, естественно, ошибок содержать не может");
         lblSoglasn = new JLabel(Integer.toString(data.getSoglasn()));
-        lblSavedCount = new JLabel("0");
+        lblSavedCount = new JLabel(saveTime);
         lblGlasn = new JLabel(Integer.toString(data.getGlasn()));
 
         lblFilledFieldsCount.setBounds(177, 5, 120, 20);
-        lblErrorCount.setBounds(270, 25, 50, 20);
-        lblSoglasn.setBounds(150, 45, 50, 20);
-        lblSavedCount.setBounds(185, 65, 50, 20);
-        lblGlasn.setBounds(137, 85, 50, 20);
+        lblErrorCount.setBounds(5, 45, 500, 20);
+        lblSoglasn.setBounds(150, 65, 50, 20);
+        lblSavedCount.setBounds(185, 85, 250, 20);
+        lblGlasn.setBounds(137, 105, 50, 20);
 
         panel4.add(lblFilledFieldsCount);
         panel4.add(lblErrorCount);
@@ -45,19 +47,19 @@ public class FormStatistic extends JFrame {
     static class Panel4 extends JPanel {
         Panel4() {
             setLayout(null);
-            setBounds(10, 10, 320, 110);
+            setBounds(10, 10, 520, 110);
             setBackground(Color.cyan);
             JLabel label1 = new JLabel("Число заполненных полей:");
             JLabel label2 = new JLabel("Kоличество ошибок при заполнении полей:");
             JLabel label3 = new JLabel("Число согласных букв:");
-            JLabel label4 = new JLabel("Число сохраненных резюме:");
+            JLabel label4 = new JLabel("время сохранения файла:");
             JLabel label9 = new JLabel("Число гласных букв:");
 
             label1.setBounds(10, 5, 162, 20);
             label2.setBounds(10, 25, 255, 20);
-            label3.setBounds(10, 45, 150, 20);
-            label4.setBounds(10, 65, 180, 20);
-            label9.setBounds(10, 85, 170, 20);
+            label3.setBounds(10, 65, 150, 20);
+            label4.setBounds(10, 85, 180, 20);
+            label9.setBounds(10, 105, 170, 20);
 
             add(label1);
             add(label2);

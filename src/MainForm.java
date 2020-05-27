@@ -41,6 +41,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
     JLabel lblPunctuationsCount;
     JFileChooser fileChooser;
 
+    Date saveTime = null;
 
     void initForm() {
         Date date = new Date();
@@ -171,41 +172,41 @@ public class MainForm extends JFrame implements ClipboardOwner {
         panelInfo = new Panel3();
         panelInfo.setVisible(true);
         add(panelInfo, panelInfoConstraints);
-        panelInfo.setLayout(new GridBagLayout());
+        // panelInfo.setLayout(new GridBagLayout());
 
-        Panel3 textInfo = new Panel3();
-        // textInfo.setLayout(null);
-        textInfo.setVisible(true);
-        textInfo.setBackground(Color.green);
-
-        GridBagConstraints textInfoConstraints = new GridBagConstraints();
-        textInfoConstraints.gridx = 0;
-        textInfoConstraints.gridy = 0;
-        textInfoConstraints.gridwidth = 1;
-        textInfoConstraints.gridheight = 1;
-        textInfoConstraints.weightx = 1.5;
-        textInfoConstraints.weighty = 1;
-        textInfoConstraints.fill = GridBagConstraints.BOTH;
-        textInfoConstraints.insets = new Insets(5, 5, 5, 5);
-
-        panelInfo.add(textInfo, textInfoConstraints);
-
-        Panel panelVariantInfo = new Panel();
-        panelVariantInfo.setLayout(null);
-        panelVariantInfo.setVisible(true);
-        panelVariantInfo.setBackground(Color.red);
-
-        GridBagConstraints variantInfoConstraints = new GridBagConstraints();
-        variantInfoConstraints.gridx = 1;
-        variantInfoConstraints.gridy = 0;
-        variantInfoConstraints.gridwidth = 1;
-        variantInfoConstraints.gridheight = 1;
-        variantInfoConstraints.weightx = 1;
-        variantInfoConstraints.weighty = 1;
-        variantInfoConstraints.fill = GridBagConstraints.BOTH;
-        variantInfoConstraints.insets = new Insets(5, 5, 5, 5);
-
-        panelInfo.add(panelVariantInfo, variantInfoConstraints);
+//        Panel3 textInfo = new Panel3();
+//        // textInfo.setLayout(null);
+//        textInfo.setVisible(true);
+//        textInfo.setBackground(Color.green);
+//
+//        GridBagConstraints textInfoConstraints = new GridBagConstraints();
+//        textInfoConstraints.gridx = 0;
+//        textInfoConstraints.gridy = 0;
+//        textInfoConstraints.gridwidth = 1;
+//        textInfoConstraints.gridheight = 1;
+//        textInfoConstraints.weightx = 1.5;
+//        textInfoConstraints.weighty = 1;
+//        textInfoConstraints.fill = GridBagConstraints.BOTH;
+//        textInfoConstraints.insets = new Insets(5, 5, 5, 5);
+//
+//        panelInfo.add(textInfo, textInfoConstraints);
+//
+//        Panel panelVariantInfo = new Panel();
+//        panelVariantInfo.setLayout(null);
+//        panelVariantInfo.setVisible(true);
+//        panelVariantInfo.setBackground(Color.red);
+//
+//        GridBagConstraints variantInfoConstraints = new GridBagConstraints();
+//        variantInfoConstraints.gridx = 1;
+//        variantInfoConstraints.gridy = 0;
+//        variantInfoConstraints.gridwidth = 1;
+//        variantInfoConstraints.gridheight = 1;
+//        variantInfoConstraints.weightx = 1;
+//        variantInfoConstraints.weighty = 1;
+//        variantInfoConstraints.fill = GridBagConstraints.BOTH;
+//        variantInfoConstraints.insets = new Insets(5, 5, 5, 5);
+//
+//        panelInfo.add(panelVariantInfo, variantInfoConstraints);
 
         lblCharactersCount = new JLabel("0");
         lblWordsCount = new JLabel("0");
@@ -227,31 +228,33 @@ public class MainForm extends JFrame implements ClipboardOwner {
         label3.setBounds(10, 70, 80, 20);
         label4.setBounds(10, 100, 160, 20);
 
-        textInfo.add(label1);
-        textInfo.add(label2);
-        textInfo.add(label3);
-        textInfo.add(label4);
+        panelInfo.add(label1);
+        panelInfo.add(label2);
+        panelInfo.add(label3);
+        panelInfo.add(label4);
 
-        textInfo.add(lblCharactersCount);
-        textInfo.add(lblWordsCount);
-        textInfo.add(lblLinesCount);
-        textInfo.add(lblPunctuationsCount);
+        panelInfo.add(lblCharactersCount);
+        panelInfo.add(lblWordsCount);
+        panelInfo.add(lblLinesCount);
+        panelInfo.add(lblPunctuationsCount);
 
 
         String variantInfo = "Задание 1 - Rezyapov D.N." + System.lineSeparator() +
                 "Задание 2 - текстовый редактор, вариант 5" + System.lineSeparator() +
                 "Задание 3 - цвет 100, расстояние 25 пт," + System.lineSeparator() +
                 " тип сообщения PLAIN_MESSAGE" + System.lineSeparator() +
-                "Задание 4 - ???" + System.lineSeparator() +
-                "Задание 5 - ???" + System.lineSeparator() +
-                "Задание 6 - ???" + System.lineSeparator() +
-                "Задание 7 - факториал суммы ASCII-кодов первых " + System.lineSeparator() +
-                "букв фамилий участников группы + 77,"+ System.lineSeparator() +" тип сообщения QUESTION_MESSAGE";
+                "Задание 4 - кнопки редактирования текста" + System.lineSeparator() +
+                "Задание 5 -число символов в тексте, число слов в тексте, число строк " +
+                "в тексте, число знаков препинания в тексте;" + System.lineSeparator() +
+                "Задание 6 - обработчики кнопок" + System.lineSeparator() +
+                "Задание 7 - факториал суммы ASCII-кодов первых " +
+                "букв фамилий участников группы + 77, тип сообщения QUESTION_MESSAGE";
         JTextArea variantInfoField = new JTextArea(variantInfo);
-
+        variantInfoField.setLineWrap(true);
+        variantInfoField.setWrapStyleWord(true);
         //JLabel variantInfoLabel1 = new JLabel();
-        variantInfoField.setBounds(10, 10, 300, 300);
-        panelVariantInfo.add(variantInfoField);
+        variantInfoField.setBounds(180, 10, 250, 300);
+        panelInfo.add(variantInfoField);
 
         fileChooser = new JFileChooser();
         setVisible(true);
@@ -266,8 +269,9 @@ public class MainForm extends JFrame implements ClipboardOwner {
         String text = area.getText();
         int soglasn = text.length() - text.replaceAll("[бвгджзйклмнпрстфхцчшщ]", "").length();
         int glasn = text.length() - text.replaceAll("[аоиеёэыуюя]", "").length();
+        int filledFields = area.getText().length() > 0 ? 1 : 0;
 
-        StatisticData sd = new StatisticData(soglasn, glasn);
+        StatisticData sd = new StatisticData(soglasn, glasn, this.saveTime, filledFields);
         FormStatistic fs = new FormStatistic(sd);
     }
 
@@ -290,6 +294,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
         int firstCharacter = surname.getBytes()[0];
         BigInteger factor = factorial(firstCharacter + 77);
         JOptionPane.showMessageDialog(this, "Факториал = " + factor.toString(), "", JOptionPane.QUESTION_MESSAGE);
+        TransferableText transferableText = new TransferableText("");
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferableText, this);
         System.exit(0);
     }
 
@@ -404,6 +410,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
                 }
                 sr.close();
                 area.setText(text.toString());
+                this.saveTime = new Date(selected.lastModified());
             } catch (FileNotFoundException ex) {
                 //TODO
             } catch (IOException ex) {
@@ -431,6 +438,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
             FileWriter fw = new FileWriter(selected);
             fw.write(area.getText());
             fw.close();
+            this.saveTime = new Date();
         } catch (java.io.IOException ex) {
             //TODO
         }
