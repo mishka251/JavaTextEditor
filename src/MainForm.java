@@ -15,6 +15,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class MainForm extends JFrame implements ClipboardOwner {
@@ -37,6 +38,12 @@ public class MainForm extends JFrame implements ClipboardOwner {
     JButton btnToRight;
     JButton btnClose;
 
+
+    JButton btnConnectToDb;
+    JButton btnShowDb;
+    JButton btnCreateTable;
+
+
     JLabel lblCharactersCount;
     JLabel lblWordsCount;
     JLabel lblLinesCount;
@@ -45,8 +52,22 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
     Date saveTime = null;
 
+    PosgtresDB db;
+
+    /**
+     * Название таблицы в БД для соискателей(резюме)
+     */
+    String jobSeekerTableName = "emploeye";
+
+    /**
+     * Название поля для текста резюме в таблице соискателей
+     */
+    String resumeFieldName = "resume";
+
+
     void initForm() {
         Date date = new Date();
+        db = new PosgtresDB();
         SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
         setTitle("Text Editor. Rezyapov D.N. Вариант 5  " + sd.format(date));
         setSize(855, 670);
@@ -58,7 +79,6 @@ public class MainForm extends JFrame implements ClipboardOwner {
         });
     }
 
-    //  static Panel3 panel3;
     MainForm() {
         initForm();
         setLayout(new GridBagLayout());
@@ -103,7 +123,7 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
 
         //buttons
-        allButtons = new JButton[12];
+        allButtons = new JButton[15];
         allButtons[0] = new JButton("Копировать");
         btnCopy = allButtons[0];
         allButtons[1] = new JButton("Вставить");
@@ -129,8 +149,15 @@ public class MainForm extends JFrame implements ClipboardOwner {
         allButtons[11] = new JButton("Выход");
         btnClose = allButtons[11];
 
+        allButtons[12] = new JButton("Connect");
+        allButtons[13] = new JButton("Show");
+        allButtons[14] = new JButton("CreateTable");
+        btnConnectToDb = allButtons[12];
+        btnShowDb = allButtons[13];
+        btnCreateTable = allButtons[14];
 
-        for (int i = 0; i < 12; i++) {
+
+        for (int i = 0; i < 15; i++) {
             GridBagConstraints buttonConstraints = new GridBagConstraints();
             buttonConstraints.gridx = i % 3;
             buttonConstraints.gridy = i / 3;
@@ -163,6 +190,13 @@ public class MainForm extends JFrame implements ClipboardOwner {
         btnFind.addActionListener(this::searchText);
 
         btnShowBuffer.addActionListener(this::showBuffer);
+
+
+        btnConnectToDb.addActionListener(this::connectToDb);
+
+        btnShowDb.addActionListener(this::showDb);
+
+        btnCreateTable.addActionListener(this::createTable);
 
         //panel3
         GridBagConstraints panelInfoConstraints = new GridBagConstraints();
@@ -231,6 +265,22 @@ public class MainForm extends JFrame implements ClipboardOwner {
 
         fileChooser = new JFileChooser();
         setVisible(true);
+    }
+
+    void connectToDb(ActionEvent event) {
+        try {
+            db.connect();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    void showDb(ActionEvent event) {
+        DbTableForm tableForm = new DbTableForm(db, jobSeekerTableName);
+    }
+
+    void createTable(ActionEvent event) {
+        CreateTableForm form = new CreateTableForm(db);
     }
 
     /**
@@ -435,6 +485,13 @@ public class MainForm extends JFrame implements ClipboardOwner {
         } catch (java.io.IOException ex) {
             //TODO
         }
+
+        if (result == 0) {
+            HashMap<String, Object> filledFields = new HashMap<String, Object>();
+            filledFields.put(resumeFieldName, area.getText());
+            CreateInstanceForm form = new CreateInstanceForm(db, jobSeekerTableName, filledFields);
+        }
+
     }
 
     /**
