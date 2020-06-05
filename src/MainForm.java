@@ -294,8 +294,8 @@ public class MainForm extends JFrame implements ClipboardOwner {
         int glasn = text.length() - text.replaceAll("[аоиеёэыуюя]", "").length();
         int filledFields = area.getText().length() > 0 ? 1 : 0;
 
-        StatisticData sd = new StatisticData(soglasn, glasn, this.saveTime, filledFields);
-        FormStatistic fs = new FormStatistic(sd);
+        StatisticData sd = new StatisticData(soglasn, glasn, this.saveTime, filledFields, text);
+        FormStatistic fs = new FormStatistic(sd, db);
     }
 
     BigInteger factorial(int n) {

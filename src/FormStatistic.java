@@ -1,9 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class FormStatistic extends JFrame {
+
+    StatisticData data;
 
     JLabel lblFilledFieldsCount;
     JLabel lblErrorCount;
@@ -11,12 +15,17 @@ public class FormStatistic extends JFrame {
     JLabel lblSavedCount;
     JLabel lblGlasn;
 
-    FormStatistic(StatisticData data) {
+    JButton btnSaveToDb;
+    PosgtresDB db;
+
+    FormStatistic(StatisticData data, PosgtresDB db) {
+        this.data=data;
+        this.db=db;
         setLayout(null);
         Date date = new Date();
         SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
         setTitle("Резяпов Д.Н. Вариант 5  " + sd.format(date));
-        setSize(570, 170);
+        setSize(570, 200);
         Panel4 panel4 = new Panel4();
         panel4.setVisible(true);
         add(panel4);
@@ -42,6 +51,22 @@ public class FormStatistic extends JFrame {
         panel4.add(lblSavedCount);
         panel4.add(lblGlasn);
 
+        btnSaveToDb = new JButton("Save");
+        btnSaveToDb.setBounds(350, 130, 90, 20);
+        add(btnSaveToDb);
+        btnSaveToDb.addActionListener(this::saveToDb);
+    }
+
+    void saveToDb(ActionEvent event){
+        String tableName = "statistic";
+        SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
+        HashMap<String, Object> values = new HashMap<>();
+        values.put("filledfields", data.getFilledFields());
+        values.put("errorscount", "нет ошибок, т.к. одно текстовое поле");
+        values.put("soglasnykh", data.getSoglasn());
+        values.put("time", sd.format(new Date()));
+        values.put("full_test", data.getFullText());
+        CreateInstanceForm form = new CreateInstanceForm(db, tableName, values);
     }
 
     static class Panel4 extends JPanel {
@@ -66,7 +91,6 @@ public class FormStatistic extends JFrame {
             add(label3);
             add(label4);
             add(label9);
-
         }
     }
 }

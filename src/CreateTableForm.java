@@ -100,6 +100,9 @@ public class CreateTableForm extends JFrame {
 
         try {
             db.createTable(tableName, columns);
+            JOptionPane.showMessageDialog(this, "OK", "Сохранено", JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
+            dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
