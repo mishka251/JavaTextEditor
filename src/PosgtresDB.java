@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PosgtresDB {
-    String dbName = "laba9Db";
-    String dbUrl = "jdbc:postgresql://localhost/" + dbName;
-    String login = "Laba9Role";
-    String password = "laba9_password";
+    String dbName = "d4nralm0ogq5kl";
+    String dbUrl = "jdbc:postgresql://ec2-54-75-246-118.eu-west-1.compute.amazonaws.com:5432/" + dbName;
+    String login = "kbxpogkteqfngx";
+    String password = "56efb63133a7ccf657a80aa906877981e726f063e9711785637742d5c7f85824";
     Connection connection;
 
     public void connect() {
